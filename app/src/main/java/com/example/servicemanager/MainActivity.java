@@ -45,15 +45,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         final ConstraintLayout root = findViewById(R.id.activity_main__view);
         root.setOnClickListener(this);
+
+        final Button btnIntentService = findViewById(R.id.activity_main__btn__intent_service);
+        btnIntentService.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.activity_main__btn__started_service:
-                Intent serviceIntent = new Intent(this, MyStartedService.class);
+                final Intent serviceIntent = new Intent(this, MyStartedService.class);
                 serviceIntent.putExtra("dummyKey", 25);
-                startService(serviceIntent);
+                Thread workerThread = new Thread() {
+                    @Override
+                    public void run() {
+                        startService(serviceIntent);
+                    }
+                };
+                workerThread.start();
                 break;
 
             case R.id.activity_main__btn__bound_service:
@@ -67,6 +76,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Toast.makeText(this, info, Toast.LENGTH_SHORT).show();
                 }
                 break;
+
+            case R.id.activity_main__btn__intent_service:
+                Intent intent = new Intent(this, MyIntentService.class);
+                intent.putExtra("foo", "bar");
+                startService(intent);
+                break;
+
             default:
                 Log.w("MainActivity", "View unknown");
         }

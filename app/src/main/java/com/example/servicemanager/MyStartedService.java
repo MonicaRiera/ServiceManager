@@ -17,6 +17,11 @@ public class MyStartedService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d("MyStartedService", "Service started");
+        try {
+            Thread.sleep(15000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         return Service.START_STICKY;
     }
 
